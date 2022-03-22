@@ -13,6 +13,8 @@ services:
             dockerfile: PHP.Dockerfile
         volumes:
             - ./app:/app
+        environment:
+            SECRET: 'ThisIsASecretKey'
     mysql:
         image: mariadb:latest
         environment:
@@ -21,8 +23,7 @@ services:
             MYSQL_PASSWORD: 'secret123'
             MYSQL_DATABASE: 'developmentdb'
         volumes:
-            - mysqldata:/var/lib/mysql
-            - ./sql:/docker-entrypoint-initdb.d
+            - ./sql/developmentdb.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - 3306:3306
     phpmyadmin:
@@ -31,6 +32,3 @@ services:
             - 8080:80
         environment:
             - PMA_HOST=mysql
-        restart: unless-stopped
-volumes:
-    mysqldata: {}
